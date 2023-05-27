@@ -10,7 +10,7 @@ export const Home = () => {
   const navigate = useNavigate()
   const handleJourneyChange = (journey) => {
     setJourney(journey)
-    console.log(journey)
+    setUserSeat(userSeat)
   }
 
   const [journey, setJourney] = useState(null)
@@ -23,18 +23,28 @@ export const Home = () => {
       },
       body: JSON.stringify({
         action: 'create',
-        seat: journey.autoSeat,
+        seat: userSeat,
         journeyId: journey.journeyId,
       }),
     }).then((response) => response.json())
       .then((data) => navigate(`/reservation/${data.results.reservationId}`));
+      
+      
   }
+
+  const [userSeat, setUserSeat] = useState(null)
 
   return (
     <main>
       <JourneyPicker onJourneyChange={handleJourneyChange}/>
       {journey ? <JourneyDetail journey={journey}/>: null}
-      {journey ? <SeatPicker seats={journey.seats} journeyId={journey.journeyId} /> : null}
+      {journey ? 
+        <SeatPicker 
+          seats={journey.seats} 
+          journeyId={journey.journeyId} 
+          selectedSeat={userSeat} 
+          onSeatSelected={setUserSeat} /> 
+      : null}
       {journey ? (<div className="controls container">
         <button className="btn btn--big" type="button" onClick={handleBuy}>Rezervovat</button>
       </div>) : null}
