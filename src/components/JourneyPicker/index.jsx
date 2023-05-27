@@ -38,7 +38,7 @@ export const JourneyPicker = ({ onJourneyChange }) => {
       .then((data) => setDates(data.results));
   }, []);
 
- const submitDisabled = toCity === "" || fromCity == "" || date == ""
+ const submitDisabled = toCity === "" || fromCity == "" || date == "" || toCity === fromCity
  
   return (
   <div className="journey-picker container">
