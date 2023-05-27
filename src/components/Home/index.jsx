@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { JourneyPicker } from '../JourneyPicker';
 import { JourneyDetail } from '../JourneyDetail';
 import { SelectedSeat } from '../SelectedSeat';
+import { SeatPicker } from '../SeatPicker';
 import './style.css'
 
 export const Home = () => {
@@ -33,7 +34,7 @@ export const Home = () => {
     <main>
       <JourneyPicker onJourneyChange={handleJourneyChange}/>
       {journey ? <JourneyDetail journey={journey}/>: null}
-      {journey ? <SelectedSeat number={journey.autoSeat}/> : null}
+      {journey ? <SeatPicker seats={journey.seats} journeyId={journey.journeyId} /> : null}
       {journey ? (<div className="controls container">
         <button className="btn btn--big" type="button" onClick={handleBuy}>Rezervovat</button>
       </div>) : null}
