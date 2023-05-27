@@ -11,14 +11,30 @@ export const JourneyPicker = ({ onJourneyChange }) => {
   const handleFromCity = (event) => {
     setFromCity(event.target.value)
   }
+
   const [toCity , setToCity] = useState('')
   const handleToCity = (event) => {
     setToCity(event.target.value)
   }
+
   const [date , setDate] = useState('')
   const handleDate = (event) => {
     setDate(event.target.value)
   }
+
+  const [cities, setCities] = useState([])
+  useEffect(() => {
+    fetch('https://apps.kodim.cz/daweb/leviexpress/api/cities')
+      .then((response) => response.json())
+      .then((data) => setCities(data.results));
+  }, []);
+
+  const [dates, setDates] = useState([])
+  useEffect(() => {
+    fetch('https://apps.kodim.cz/daweb/leviexpress/api/dates')
+      .then((response) => response.json())
+      .then((data) => setDates(data.results));
+  }, []);
 
   return (
   <div className="journey-picker container">
@@ -28,34 +44,19 @@ export const JourneyPicker = ({ onJourneyChange }) => {
         <label>
           <div className="journey-picker__label">Odkud:</div>
           <select value={fromCity} onChange={handleFromCity}>
-            <option value="">Vyberte</option>
-            <option value="mesto01">Město 01</option>
-            <option value="mesto02">Město 02</option>
-            <option value="mesto03">Město 03</option>
-            <option value="mesto04">Město 04</option>
-            <option value="mesto05">Město 05</option>
+           <CityOptions cities={cities}/>
           </select>
         </label>
         <label>
           <div className="journey-picker__label">Kam:</div>
           <select value={toCity} onChange={handleToCity}>
-            <option value="">Vyberte</option>
-            <option value="mesto01">Město 01</option>
-            <option value="mesto02">Město 02</option>
-            <option value="mesto03">Město 03</option>
-            <option value="mesto04">Město 04</option>
-            <option value="mesto05">Město 05</option>
+            <CityOptions cities={cities}/>
           </select>
         </label>
         <label>
           <div className="journey-picker__label">Datum:</div>
           <select value={date} onChange={handleDate}>
-            <option value="">Vyberte</option>
-            <option value="datum01">Datum 01</option>
-            <option value="datum02">Datum 02</option>
-            <option value="datum03">Datum 03</option>
-            <option value="datum04">Datum 04</option>
-            <option value="datum05">Datum 05</option>
+            <DatesOptions dates={dates}/>
           </select>
         </label>
         <div className="journey-picker__controls">
@@ -70,5 +71,32 @@ export const JourneyPicker = ({ onJourneyChange }) => {
       <img className="journey-picker__map" src="/map.svg" />
     </div>
   </div>
+  )
+}
+
+const CityOptions = ({cities}) => {
+  return (
+    <>
+      <option value="">Vyberte</option>
+      {cities.map((city) => 
+        <option key={city.code} value={city.name}>{city.name}</option>
+      )}
+    </>
+  )
+}
+
+const DatesOptions = ({dates}) => {
+  return (
+    <>
+      <option value="">Vyberte</option>
+      {dates.map((date) =>
+        <option key={date.dateBasic} value={date.dateBasic}>{date.dateCs}</option>
+      )}
+      {/* <option value="datum01">Datum 01</option>
+      <option value="datum02">Datum 02</option>
+      <option value="datum03">Datum 03</option>
+      <option value="datum04">Datum 04</option>
+      <option value="datum05">Datum 05</option> */}
+    </>
   )
 }

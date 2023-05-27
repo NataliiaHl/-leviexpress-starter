@@ -10,6 +10,3 @@ export const App = () => (
     <Footer />
   </>
 );
-
-
-
